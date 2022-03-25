@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled/macro";
 import usePokemon from "../hooks/usePokemon";
 import { ListResponse } from "../types";
+import { useNavigate } from "react-router-dom";
 
 const Base = styled.div`
   margin-top: 24px;
@@ -62,6 +63,7 @@ const getImageUrl = (index: number): string =>
 
 const PokemonList: React.FC = () => {
   const { isLoading, isError, data } = usePokemon<ListResponse>();
+  const navigate = useNavigate();
 
   const formatNumbering = (index: number): string => {
     return `#${String(index).padStart(3, "0")}`;
@@ -75,7 +77,10 @@ const PokemonList: React.FC = () => {
       ) : (
         <List>
           {data?.data.results.map((pokemon, idx) => (
-            <ListItem key={pokemon.name}>
+            <ListItem
+              key={pokemon.name}
+              onClick={() => navigate(`/${idx + 1}`)}
+            >
               <Image src={getImageUrl(idx + 1)} />
               <Name>{pokemon.name}</Name>
               <Index>{formatNumbering(idx + 1)}</Index>
